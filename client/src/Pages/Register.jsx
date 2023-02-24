@@ -1,48 +1,40 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { register, selectUser } from "../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { register } from "../redux/apiCalls";
 import { mobile } from "../responsive";
 
 const Register = () => {
-  const [detail,setDetail] = useState({
-    firstname : '',
-    lastname : '',
-    username: '',
-    email : '',
-    password : '',
-    confirmpassword: '',
-   });
-   
-   const inputEvent=(event)=>{
-    const value = event.target.value;
-    const detail = event.target.name;
-    // console.log(value);
-    // console.log(detail);
-    
-    setDetail((preValue)=>{
-        return{
-            ...preValue,
-            [detail]:value       
-        }
+  const navigate = useNavigate();
+  const [firstname,setFirstname] = useState("");
+  const [lastname,setLastname] = useState("");
+  const [username,setUsername] = useState("");
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
+  const [confirmpassword,setConfirmPassword] = useState("");
 
-    })};
+  const dispatch = useDispatch();
+  const registerEvent=(event)=>{
+    event.preventDefault();
+    register(dispatch,{firstname,lastname,username,email,password,confirmpassword});
+  };
   return (
     <Container>
       <Wrapper>
         <Title>CREATE AN ACCOUNT</Title>
         <Form>
-          <Input placeholder="First Name" name="firstname" onChange={inputEvent} />
-          <Input placeholder="Last Name" name="lastname" onChange={inputEvent}/>
-          <Input placeholder="Username" name="username"onChange={inputEvent} />
-          <Input placeholder="Email" name="email" type="email" onChange={inputEvent}/>
-          <Input placeholder="Password" name="password" type="password" onChange={inputEvent} />
-          <Input placeholder="Confirm Password" name="confirmpassword" type="password" onChange={inputEvent} />
+          <Input placeholder="First Name" name="firstname" onChange={(e)=>setFirstname(e.target.value)}  />
+          <Input placeholder="Last Name" name="lastname" onChange={(e)=>setLastname(e.target.value)}/>
+          <Input placeholder="Username" name="username"onChange={(e)=>setUsername(e.target.value)} />
+          <Input placeholder="Email" name="email" type="email" onChange={(e)=>setEmail(e.target.value)}/>
+          <Input placeholder="Password" name="password" type="password" onChange={(e)=>setPassword(e.target.value)} />
+          <Input placeholder="Confirm Password" name="confirmpassword" type="password" onChange={(e)=>setConfirmPassword(e.target.value)} />
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the PRIVACY POLICY
           </Agreement>
-          <Button>CREATE</Button>
+          <Button onClick={registerEvent}>CREATE</Button>
         </Form>
       </Wrapper>
     </Container>

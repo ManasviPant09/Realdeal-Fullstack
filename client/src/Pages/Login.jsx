@@ -1,44 +1,35 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { login } from "../redux/authSlice";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/apiCalls";
 import {mobile} from "../responsive";
 
 const Login=()=>{
-  const[detail,setDetail] = useState({
-    username: "",
-    password: "",
-  });
-
-  const inputEvent=(event)=>{
-    const value = event.target.value;
-    const detail = event.target.name;
-    setDetail((preValue)=>{
-      return{
-        ...preValue,
-        [detail]:value
-      }
-  })};
+  const[username,setUsername] = useState("");
+  const[password,setPassword] = useState("")
 
   const dispatch = useDispatch();
   const loginEvent=(event)=>{
     event.preventDefault();
-    dispatch(login({
-      username: detail.username,
-      password: detail.password,
-    }));
-  }
+    login(dispatch,{username,password});
+  };
+  
 
+  const {isFetching,error} = useSelector((state)=>state.user);
   return(
     <Container>
       <Wrapper>
         <Title>SIGN IN</Title>
         <Form>
-        <Input placeholder="Enter your username" name="username" type="text" onChange={inputEvent} />
-        <Input placeholder="Enter your password" name="password" type="password" onChange={inputEvent} />
-        <Button onClick={loginEvent}>LOGIN</Button>
-          <Link style={{textDecoration: "none"}}>FORGOT PASSWORD? CLICK HERE</Link>
-          <Link style={{textDecoration: "none"}}>CREATE A NEW ACCOUNT</Link>
+        <Input placeholder="Enter your username" name="username" type="text" onChange={(e)=>setUsername(e.target.value)} />
+        <Input placeholder="Enter your password" name="password" type="password" onChange={(e)=>setPassword(e.target.value)} />
+        <Button onClick={loginEvent}>SIGN IN</Button>
+        {error && <Error>Something went wrong</Error>}
+        <Help>
+        <Link to="/register" style={{textDecoration: "none",color: "black"}}><TitleHelp>CREATE A NEW ACCOUNT</TitleHelp></Link>
+          <TitleHelp style={{textDecoration: "none"}}>FORGOT PASSWORD?</TitleHelp>          
+        </Help>
         </Form>
       </Wrapper>
     </Container>
@@ -91,12 +82,22 @@ const Button = styled.button`
   cursor: pointer;
   margin-bottom: 10px;
 `;
-
-const Link = styled.a`
-  margin: 5px 0px;
-  font-size: 12px;
-  text-decoration: underline;
+const Error = styled.h5`
+  color: red;
+  margin: -2% 0 2% 0;
+  font-weight: 300;
+`;
+const Help = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: -2% 0 0 0;
+`;
+const TitleHelp = styled.h6`
+  margin: 0.75px 0px 0px 2px;
+  padding-right: 40px;
+  font-size: 10px;
   cursor: pointer;
+  font-weight: 500;
 `;
 
 export default Login;

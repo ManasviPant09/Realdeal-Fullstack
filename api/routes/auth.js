@@ -5,9 +5,12 @@ const jwt = require("jsonwebtoken");
 //REGISTER
 router.post("/register", async (req,res)=>{
     const newUser = new User({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
         username: req.body.username,
         email: req.body.email,
         password: CryptoJS.AES.encrypt(req.body.password,process.env.PASS_SECRET).toString(),
+        confirmpassword: CryptoJS.AES.encrypt(req.body.password,process.env.PASS_SECRET).toString(),
     });
     try{
         const savedUser = await newUser.save();
