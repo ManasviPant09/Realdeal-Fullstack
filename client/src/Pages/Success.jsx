@@ -1,12 +1,7 @@
 import styled from "styled-components";
 import {motion} from "framer-motion";
-import { useLocation } from "react-router";
 
 const Success = () => {
-  // const location = useLocation();
-  // const data = location.state.stripeData;
-  // const cart = location.state.cart;
-  // // console.log(data);
   return (
     <Container>
       <Text> <motion.h2 initial={{color: "white",opacity: 0}} animate={{color: "#787878",opacity: 1}} transition={{ duration: 3.0 }}>
