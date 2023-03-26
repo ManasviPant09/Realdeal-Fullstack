@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -18,6 +19,12 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, "/client/build")));
+  app.get("*", (req, res) =>
+    res.sendFile(path.join(__dirname, "/client/build/index.html"))
+  );
 
 app.use(cors());
 app.use(express.json());
